@@ -19,14 +19,14 @@ namespace OpenChat
       {
         //connect to server and get my ID
         string ID = "";
-        bool check = true;
-        serverHandling = new ServerOrganization(ref ID);
+
+        
         //now create mySelf
         myself = new User(UserName,Comment,ProfilePic,ID);
-        serverHandling.SendMyself(true);
+        serverHandling = new ServerOrganization(ref myself,"192.168.1.1");
         currentConnetced = new User[0];
         ChatHistory = new Message[0];
-        refreshThread = new Thread(refreshContent)
+        refreshThread = new Thread(refreshContent);
         refreshThread.Start();
       }
       public void SendMessage(string content, string UserID)
@@ -62,7 +62,7 @@ namespace OpenChat
         //Make a sendableMessage
         string sendableMessage = "{"+UserID+"}"+"{C}" + Content;
         serverHandling.SendMessage(sendableMessage);
-        serverHandling.SendContent(picture);
+
         //search the Message to save
         bool found = false;
         for(int i = 0; i< ChatHistory.Length; i++)
@@ -78,7 +78,7 @@ namespace OpenChat
         {
           //save the current array
           Message[] backup = ChatHistory;
-          ChatHistory = new backup[backup.Length + 1]
+          ChatHistory = new Message[backup.Length + 1];
           for(int i  = 0 ; i<backup.Length;i++)
           {
             ChatHistory[i] = backup[i];
@@ -108,7 +108,7 @@ namespace OpenChat
       public bool ChangeIp(string IPAddress)
       {
         string ID = "";
-        serverHandling = new ServerOrganization(ref ID,IPAddress,myself);
+        serverHandling = new ServerOrganization(ref myself,IPAddress);
         if(ID == "")
         {
           return false;
@@ -182,15 +182,15 @@ namespace OpenChat
               }
             }
             //create the new user object
-            User newConnected = new User(UserName,Comment,UserPic,UserId);
+            User newConnected = new User(UserName,comment,UserPic,UserId);
             //add it to the array
-            User[] backup = currentConnected;
-            currentConnected = new User[backup.Length +1];
+            User[] backup = currentConnetced;
+           currentConnetced = new User[backup.Length +1];
             for(int k = 0; k<backup.Length;k++)
             {
-              currentConnected[k] = backup[k];
+              currentConnetced[k] = backup[k];
             }
-            currentConnected[backup.Length] = newConnected;
+            currentConnetced[backup.Length] = newConnected;
             //finish//
           }
           else if(firstBracket == "{DC}")
@@ -198,11 +198,11 @@ namespace OpenChat
             //a client disconnected
             current = current.Replace(firstBracket,"");
             //serach the ID and delete all Messages of that User
-            for(int k = 0; k < currentConnected.Length; k++)
+            for(int k = 0; k < currentConnetced.Length; k++)
             {
-              if(User[k].GetUserID() == current)
+              if(currentConnetced[k].GetUserID() == current)
               {
-                User[k] = null;
+                currentConnetced[k] = null;
                 break;
               }
             }
@@ -211,14 +211,14 @@ namespace OpenChat
             {
               if(ChatHistory[k].GetPartnerID() == current)
               {
-                ChatHistory[k] == null;
+                ChatHistory[k] = null;
               }
             }
             //now clean up the Arraylist: Userlist
             User[] newCurrentConnected = new User[0];
-            for(int k = 0; k < currentConnected.Length; k++)
+            for(int k = 0; k < currentConnetced.Length; k++)
             {
-              if(currentConnected[k] != null)
+              if(currentConnetced[k] != null)
               {
                 User[] newCurrentConnectedBackup = newCurrentConnected;
                 newCurrentConnected = new User[newCurrentConnectedBackup.Length + 1];
@@ -226,10 +226,10 @@ namespace OpenChat
                 {
                   newCurrentConnected[j] = newCurrentConnectedBackup[j];
                 }
-                newCurrentConnected[newCurrentConnectedBackup.Length] = currentConnected[k];
+                newCurrentConnected[newCurrentConnectedBackup.Length] = currentConnetced[k];
               }
             }
-            currentConnected = newCurrentConnected;
+            currentConnetced = newCurrentConnected;
             //now clean up the Arraylist: Message
             Message[] newChatHistory = new Message[0];
             for(int k = 0; k< ChatHistory.Length; k++)
@@ -253,8 +253,8 @@ namespace OpenChat
             //a message received
             //the first bracket contains the User_ID
             string message = messages[i].Replace(firstBracket,"");
-            firstBracket = firstBracket.Replace('{','');
-            firstBracket = firstBracket.Replace('}','');
+            firstBracket = firstBracket.Replace("{","");
+            firstBracket = firstBracket.Replace("}","");
             //now search for the User-ID to add this message to the history
             bool found = false;
             for(int k = 0; k < ChatHistory.Length; k++)
@@ -278,7 +278,7 @@ namespace OpenChat
               {
                 ChatHistory[k] = backup[k];
               }
-              ChatHistory[backup.Length] = message;
+              ChatHistory[backup.Length] = newMessage;
             }
             //new message is now stored
           }
@@ -292,7 +292,7 @@ namespace OpenChat
         string currentBracket = "";
         for(int i = 0; i<workString.Length; i++)
         {
-          if(workString[i] != "}")
+          if(workString[i] != '}')
           {
             //start a new bracket
             currentBracket += workString[i];
