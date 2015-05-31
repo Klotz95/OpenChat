@@ -61,22 +61,10 @@ namespace OpenChat
           MessageChanged = true;
         }
       }
-      public void SendMessageWithContent(string UserID, byte[] picture)
+      public void SendMessageWithContent(string Content, string UserID, byte[] picture)
       {
         //Make a sendableMessage
-        string sendableMessage = "{"+UserID+"}"+"{C}";
-        ASCIIEncoding enc = new ASCIIEncoding();
-        sendableMessage += enc.GetString(picture);
-        sendableMessage = sendableMessage.Replace("\0", "{BackslashNull}");
-        sendableMessage = sendableMessage.Replace("\a", "{BackslashA}");
-        sendableMessage = sendableMessage.Replace("\b", "{BackslashB}");
-        sendableMessage = sendableMessage.Replace("\f", "{BackslashF}");
-        sendableMessage = sendableMessage.Replace("\n", "{BackslashN}");
-        sendableMessage = sendableMessage.Replace("\r", "{BackslashR}");
-        sendableMessage = sendableMessage.Replace("\t", "{BackslashT}");
-        sendableMessage = sendableMessage.Replace("\v", "{BackslashV}");
-        sendableMessage = sendableMessage.Replace("\'", "{Backslash'}");
-
+        string sendableMessage = "{"+UserID+"}"+"{C}" + Content;
         serverHandling.SendMessage(sendableMessage);
 
         //search the Message to save
@@ -86,6 +74,7 @@ namespace OpenChat
           if(ChatHistory[i].GetPartnerID()  == UserID)
           {
             found = true;
+            ChatHistory[i].AddToHistory(true,Content);
             ChatHistory[i].AddContent(picture,true);
           }
         }
@@ -100,6 +89,7 @@ namespace OpenChat
           }
           ChatHistory[backup.Length] = new Message(UserID);
           //now save the message
+          ChatHistory[backup.Length].AddToHistory(true, Content);
           ChatHistory[backup.Length].AddContent(picture,true);
         }
       }
@@ -155,6 +145,7 @@ namespace OpenChat
         {
           //check the first bracket
           string current = messages[i];
+          current = current.Replace("\0", "");
           string firstBracket = "";
           for(int k = 0;k< current.Length;k++)
           {
@@ -284,8 +275,6 @@ namespace OpenChat
           {
             //a message received
             //the first bracket contains the User_ID
-              if(!messages[i].Contains("{C}"))
-              {
               string message = "";
               try
               {
@@ -297,7 +286,6 @@ namespace OpenChat
               }
               if (message != "")
               {
-
                   message = message.Replace("{", "");
                   message = message.Replace("}", "");
                   firstBracket = firstBracket.Replace("{", "");
@@ -333,57 +321,6 @@ namespace OpenChat
                   //new message is now stored
               }
           }
-          else
-          {
-            //there is a content
-            string message = "";
-            try
-            {
-              message = seperateBrackets(messages[i])[2];
-            }
-            catch
-            {
-
-            }
-            if(message != "")
-            {
-              //now try to get the picture
-              ASCIIEncoding enc = new ASCIIEncoding();
-              byte[] picture = enc.GetBytes(message);
-              //now search the User-Message
-              bool found = false;
-              for (int k = 0; k < ChatHistory.Length; k++)
-              {
-                  if (ChatHistory[k].GetPartnerID() == firstBracket)
-                  {
-                      //add the message to the history
-                      ChatHistory[k].AddContent(picture,false);
-                      found = true;
-                      MessageChanged = true;
-                      break;
-                  }
-              }
-              if (!found)
-              {
-                  //create a new Message
-                  Message newMessage = new Message(firstBracket);
-                  newMessage.AddContent(picture,false);
-                  //add it to the history
-                  Message[] backup = ChatHistory;
-                  ChatHistory = new Message[backup.Length + 1];
-                  for (int k = 0; k < backup.Length; k++)
-                  {
-                      ChatHistory[k] = backup[k];
-                  }
-                  ChatHistory[backup.Length] = newMessage;
-                  MessageChanged = true;
-              }
-            }
-          }
-
-
-
-        }
 
         }
       }

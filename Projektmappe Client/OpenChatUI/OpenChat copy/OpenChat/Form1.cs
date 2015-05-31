@@ -1,4 +1,4 @@
- ﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,7 +39,7 @@ namespace OpenChat
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            
             if (textBox1.Text != "")
             {
                 TextBox1Insert = true;
@@ -65,14 +65,14 @@ namespace OpenChat
                     button1.Location = new Point(0, this.Height - 100);
                     button1.Text = "Connect";
                     button1.ForeColor = Color.Green;
-
+                    
                 }
             }
         }
 
+        
 
-
-
+        
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -97,7 +97,7 @@ namespace OpenChat
                     button1.Visible = true;
                     button1.Width = this.Width;
                     button1.Height = 50;
-
+                   
                     button1.Location = new Point(0, this.Height - 100);
                     button1.Text = "Connect";
                     button1.ForeColor = Color.Green;

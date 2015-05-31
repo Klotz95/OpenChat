@@ -1,0 +1,11 @@
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\bin\Debug\OpenChat.exe
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\bin\Debug\OpenChat.pdb
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.StartUp.resources
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.Properties.Resources.resources
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.csproj.GenerateResource.Cache
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.exe
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.pdb
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.MainMenu.resources
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.csprojResolveAssemblyReference.cache
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.UserInformation.resources
+Z:\OpenChat\Projektmappe Client\OpenChatUI\OpenChat\OpenChat\obj\x86\Debug\OpenChat.ServerIp.resources

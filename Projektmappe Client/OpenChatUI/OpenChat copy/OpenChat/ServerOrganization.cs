@@ -62,7 +62,7 @@ namespace OpenChat
           }
           //now send this informations
           byte[] sendableMessage = enc.GetBytes(Intro);
-          
+          Console.WriteLine("sendable Message Count: {0}", sendableMessage.Length);
           Server.Send(sendableMessage);
           //now the server is informed about me. Start Thread to receive messages of serverIP
           Listener = new Thread(Listen);
@@ -79,7 +79,6 @@ namespace OpenChat
           byte[] buffer = new byte[1000000];
           Server.Receive(buffer);
           string receivedMessage = enc.GetString(buffer);
-          receivedMessage = receivedMessage.Replace("\0", "");
           if (rest)
           {
               receivedMessage = restMessage + receivedMessage;
@@ -103,7 +102,7 @@ namespace OpenChat
             }
             else
             {
-              currentMessage += Convert.ToString(receivedMessage[i]);
+                                                                                    currentMessage += Convert.ToString(receivedMessage[i]);
             }
           }
           //now check if there is a rest

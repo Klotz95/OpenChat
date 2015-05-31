@@ -69,12 +69,12 @@ namespace OpenChat
             button2.Size = new Size(100, 50);
             button2.BackColor = Color.White;
             button2.Location = new Point(panel2.Width - 10 - button2.Width,panel2.Height - (panel2.Height/4) - button2.Height/2);
+
             //send content Button
             button5.Text = "picture";
-            button5.Size = new Size(100,50);
+            button5.Size = new Size(100, 50);
             button5.BackColor = Color.White;
-            button5.Location = new Point(panel2.Width - 10 - button5.Width,panel2.Height/4 - button5.Height/2);
-
+            button5.Location = new Point(panel2.Width - 10 - button2.Width, (panel2.Height / 4) - button2.Height / 2);
             //text box of Panel 2
 
             textBox1.Location = new Point(panel1.Width, 10);
@@ -150,10 +150,10 @@ namespace OpenChat
             panel3.Height = this.ClientSize.Height - panel2.Height;
 
             //send Button
-            button2.Location = new Point(panel2.Width - 10 - button2.Width,panel2.Height - (panel2.Height/4) - button2.Height/2);
+            button2.Location = new Point(panel2.Width - 10 - button2.Width, panel2.Height - (panel2.Height / 4) - button2.Height / 2);
 
             //send content button
-            button5.Location = new Point(panel2.Width - 10 - button5.Width,panel2.Height/4 - button5.Height/2);
+            button5.Location = new Point(panel2.Width - 10 - button2.Width, (panel2.Height / 4) - button2.Height / 2);
 
             //textbox of Panel2
             textBox1.Location = new Point(panel1.Width, 10);
@@ -493,26 +493,29 @@ namespace OpenChat
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //make an openfiledialog to search for an image
+            //Open FileDialog to select a image
             OpenFileDialog os = new OpenFileDialog();
             os.ShowDialog();
-            Image currentImage = null;
             string Pfad = os.FileName;
+            Image currentSelected = null;
             try
             {
-                currentImage = Image.FromFile(Pfad);
+                currentSelected = Image.FromFile(Pfad);
             }
             catch
             {
-
+                Console.WriteLine("Cant open the selected file");
             }
-            if (currentImage != null)
+            if (currentSelected != null)
             {
                 MemoryStream ms = new MemoryStream();
                 ImageFormatConverter mf = new ImageFormatConverter();
-                currentImage.Save(ms, ImageFormat.Jpeg);
-                byte[] convertedImage = ms.ToArray();
-                orga.SendMessageWithContent(CurrentSeletctedChatID, convertedImage);
+                currentSelected.Save(ms, ImageFormat.Jpeg);
+                byte[] Image = ms.ToArray();
+                //now make a message
+                ASCIIEncoding enc = new ASCIIEncoding();
+
+                orga.SendMessage(CurrentSeletctedChatID, enc.GetString(Image));
             }
         }
 
